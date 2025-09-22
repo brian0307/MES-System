@@ -1,0 +1,265 @@
+1️⃣ 接手大型專案時，從哪裡開始閱讀
+
+通常大型 Java 專案（特別是 Spring / Spring Boot 為主的）會有以下切入點：
+
+從 Main 入口開始
+
+找 public static void main(String[] args) 或 @SpringBootApplication 的類別。
+
+這是整個程式啟動的進入點，可以看到初始化流程。
+
+從框架配置看結構
+
+Spring Boot 專案 → 看 application.yml / application.properties。
+
+非 Spring 專案 → 看 web.xml、applicationContext.xml 或 META-INF 下的設定檔。
+
+配置檔會告訴你資料庫、API、服務的主要設定。
+
+從 Domain/Model 層切入
+
+找 entity、model、dto、vo 等資料結構。
+
+先理解專案處理的「資料型態」是什麼。
+
+從 Controller/Service 層切入
+
+Controller：對外的入口（API / Web）。
+
+Service：主要的商業邏輯。
+
+Repository/DAO：資料庫操作。
+→ 這樣可以快速掌握 Request → 處理 → Response 的流程。
+
+搭配工具輔助閱讀
+
+Project 結構 (Alt+1) 看檔案分層。
+
+Diagram (Ctrl+Alt+U) 看類別/方法之間的依賴。
+
+UML 類圖（右鍵 class → Diagrams → Show Diagram）。
+
+2️⃣ IntelliJ IDEA 導航 / 跳轉常用快捷鍵
+
+（Windows / Linux 為主，macOS 把 Ctrl 換成 Cmd）
+
+🔍 定位 / 搜尋
+
+Ctrl+Shift+N → 搜檔案（File）
+
+Ctrl+Shift+Alt+N → 搜方法/欄位（Symbol）
+
+Ctrl+Shift+F → 全域搜尋字串（Find in Path）
+
+📌 跳轉
+
+Ctrl+B / Ctrl+Click → 跳到定義（Go to Declaration）
+
+Ctrl+Alt+B → 跳到實作（Go to Implementation）
+
+Ctrl+U → 跳到父類/介面（Go to Super）
+
+Ctrl+Alt+H → 呼叫階層（Call Hierarchy）
+
+↩ 回到原點
+
+Ctrl+Alt+← → 回到上一個游標位置
+
+Ctrl+Alt+→ → 往前一個游標位置
+
+👁 快速瀏覽
+
+Ctrl+Shift+I → Quick Definition（不用跳轉就能預覽）
+
+Ctrl+P → 顯示方法參數提示
+
+✅ 建議 workflow
+
+先用 Ctrl+Shift+N 找到 Main → 看進入點。
+
+往下跟 → Service / Controller → 看呼叫階層 (Ctrl+Alt+H)。
+
+如果迷路 → Ctrl+Alt+← 回到原點。
+
+配合 Debug 模式，邊跑邊看 stack trace，理解流程。
+
+要不要我幫你畫一張「接手大型 Java 專案的閱讀流程圖」（從 Main → Config → Domain → Controller → Service → Repository），搭配 IntelliJ 快捷鍵對應？
+
+你說：
+好的
+ChatGPT 說：
+
+太好了 👍 我幫你整理一份「接手大型 Java 專案閱讀流程圖」，同時把 IntelliJ IDEA 常用快捷鍵對應上去。
+
+🗺 接手大型 Java 專案閱讀流程圖
+[Main 入口]  ← (Ctrl+Shift+N 找 Main 類別)
+    |
+    v
+[Config / 設定檔] ← (Ctrl+Shift+N 找 application.yml / properties)
+    |
+    v
+[Domain / Model] ← (Ctrl+Shift+Alt+N 找 Entity, DTO, VO)
+    |
+    v
+[Controller] ← (Ctrl+B / Ctrl+Click 跳到對應 API)
+    |
+    v
+[Service] ← (Ctrl+Alt+H 看呼叫階層)
+    |
+    v
+[Repository / DAO] ← (Ctrl+Alt+B 看實作, Ctrl+U 回父介面)
+
+⌨ IntelliJ 導航對應
+📍 起點
+
+Ctrl+Shift+N → 找檔案（Main class, config 檔）
+
+Ctrl+Shift+Alt+N → 找類別 / 方法 / Symbol
+
+📌 追蹤程式碼
+
+Ctrl+B / Ctrl+Click → 跳到定義
+
+Ctrl+Alt+B → 跳到實作
+
+Ctrl+U → 跳到父類 / interface
+
+Ctrl+Alt+H → 查看呼叫階層
+
+↩ 回到原點
+
+Ctrl+Alt+← → 回到上一個游標位置
+
+Ctrl+Alt+→ → 往前一個游標位置
+
+👁 快速檢視
+
+Ctrl+Shift+I → Quick Definition（不跳轉直接預覽）
+
+Ctrl+P → 顯示方法參數提示
+
+📌 建議閱讀順序：
+
+Main 入口 → 理解專案啟動流程。
+
+Config → 知道系統用什麼設定（DB / Port / API）。
+
+Domain → 看資料結構。
+
+Controller → 知道外部怎麼呼叫 API。
+
+Service → 看業務邏輯。
+
+Repository → 看資料怎麼存取。
+
+👉 GET /users
+流程會經過 Controller → Service → Repository → DB
+同時標註 IntelliJ IDEA 常用快捷鍵，方便你跟程式碼。
+
+📌 實戰案例圖：GET /users
+[UserController]  (API入口)
+   @GetMapping("/users")
+   └──> userService.getAllUsers();
+
+   🔑 Ctrl+B / Ctrl+Click  跳到 userService.getAllUsers()
+   🔑 Ctrl+Alt+H  看有哪些地方呼叫 getAllUsers()
+
+        |
+        v
+
+[UserService]  (商業邏輯層)
+   public List<User> getAllUsers() {
+       return userRepository.findAll();
+   }
+
+   🔑 Ctrl+B / Ctrl+Click  跳到 userRepository.findAll()
+   🔑 Ctrl+Alt+B  看 findAll() 的實作
+   🔑 Ctrl+U  回到 Repository interface
+
+        |
+        v
+
+[UserRepository]  (資料庫操作層)
+   interface UserRepository extends JpaRepository<User, Long> {
+   }
+
+   🔑 Ctrl+Alt+B  查看 JpaRepository 的實作
+   🔑 Ctrl+Shift+I  快速預覽定義
+   🔑 Ctrl+Shift+N  搜 JpaRepository 原始碼
+
+        |
+        v
+
+[Database]  (實際存取 DB)
+   SELECT * FROM users;
+
+🚀 IntelliJ 操作小技巧
+
+從 Controller 開始：用 Ctrl+Shift+N 找 UserController。
+
+跳到 Service：用 Ctrl+B 跟進到 userService.getAllUsers()。
+
+看呼叫階層：在 Service 上按 Ctrl+Alt+H，知道哪些地方呼叫這個方法。
+
+深入 Repository：在 userRepository.findAll() 上用 Ctrl+Alt+B 看實作。
+
+回到原點：用 Ctrl+Alt+← 回到 Controller。
+
+👉 這樣走一輪，你就能完整理解 一個 API Request → Response 的全流程。
+
+🧭 Java 專案閱讀心智圖
+                    [Main 啟動入口]
+                          |
+                          v
+             ┌─────────── [Config / 設定檔] ────────────┐
+             |       (application.yml / properties)     |
+             └──────────────────────┬──────────────────┘
+                                    v
+                            [Domain / Model]
+                    (Entity / DTO / VO → 資料結構)
+                                    |
+                                    v
+                            [Controller 層]
+                    (API 入口 @RestController / @GetMapping)
+                       🔑 Ctrl+B / Ctrl+Click 跳進方法
+                                    |
+                                    v
+                            [Service 層]
+                    (商業邏輯：業務流程實作)
+                       🔑 Ctrl+Alt+H 呼叫階層
+                       🔑 Ctrl+Alt+B 跳到實作
+                                    |
+                                    v
+                           [Repository 層]
+                    (資料庫存取，通常 extends JpaRepository)
+                       🔑 Ctrl+U 回到父介面
+                       🔑 Ctrl+Alt+B 看實作
+                                    |
+                                    v
+                             [Database 層]
+                    (最終 SQL 執行 → DB 互動)
+
+⌨ 快捷鍵總整理（接專案必備）
+操作	快捷鍵
+找檔案 / 類別	Ctrl+Shift+N
+找方法 / Symbol	Ctrl+Shift+Alt+N
+全域搜尋字串	Ctrl+Shift+F
+跳到定義	Ctrl+B / Ctrl+Click
+跳到實作	Ctrl+Alt+B
+回到父類/介面	Ctrl+U
+查看呼叫階層	Ctrl+Alt+H
+回到上一位置	Ctrl+Alt+←
+前進到下一位置	Ctrl+Alt+→
+快速預覽定義	Ctrl+Shift+I
+
+👉 建議流程：
+
+先看 Main → 確定啟動點。
+
+再看 Config → 掌握系統設定。
+
+看 Domain → 理解處理資料結構。
+
+從 Controller → Service → Repository → 追一個 API 全流程。
+
+最後看 DB → 確認資料存取方式。
